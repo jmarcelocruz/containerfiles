@@ -1,0 +1,13 @@
+FROM docker.io/golang:1.24 AS build
+WORKDIR /go/src
+
+ARG DISTROBUILDER_VERSION
+
+RUN wget https://github.com/lxc/distrobuilder/archive/refs/tags/distrobuilder-${DISTROBUILDER_VERSION}.tar.gz \
+    && mkdir distrobuilder && tar -xvf distrobuilder-${DISTROBUILDER_VERSION}.tar.gz -C distrobuilder --strip-components=1 \
+    && cd distrobuilder && make
+
+FROM docker.io/busybox:1.37
+COPY --from=build /go/bin/distrobuilder /usr/local/bin/distrobuilder
+
+ENTRYPOINT [ "/usr/local/bin/distrobuilder" ]
