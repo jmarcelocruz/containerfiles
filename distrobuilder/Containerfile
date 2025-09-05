@@ -7,7 +7,7 @@ RUN wget https://github.com/lxc/distrobuilder/archive/refs/tags/distrobuilder-${
     && mkdir distrobuilder && tar -xvf distrobuilder-${DISTROBUILDER_VERSION}.tar.gz -C distrobuilder --strip-components=1 \
     && cd distrobuilder && make
 
-FROM docker.io/busybox:1.37
+FROM docker.io/debian:trixie
 COPY --from=build /go/bin/distrobuilder /usr/local/bin/distrobuilder
 
 ENTRYPOINT [ "/usr/local/bin/distrobuilder" ]
