@@ -10,4 +10,8 @@ RUN wget https://github.com/lxc/distrobuilder/archive/refs/tags/distrobuilder-${
 FROM docker.io/debian:trixie
 COPY --from=build /go/bin/distrobuilder /usr/local/bin/distrobuilder
 
+RUN apt update \
+    && apt install -y debootstrap gpg rsync xz-utils \
+    && apt clean && rm -rf /var/lib/apt/lists/*
+
 ENTRYPOINT [ "/usr/local/bin/distrobuilder" ]
